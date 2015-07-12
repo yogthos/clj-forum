@@ -29,3 +29,36 @@
         :on-click #(session/remove! :error)}
        "OK"]]]))
 
+(defn input [type opts id placeholder fields]
+  [(if (= :textarea type)
+     :textarea.form-control.input-lg
+     :input.form-control.input-lg)
+   (merge
+     {:placeholder placeholder
+      :value       (id @fields)
+      :on-change   #(swap! fields assoc id (-> % .-target .-value))}
+     (when-not (= :textarea type)
+       {:type        type})
+     opts)])
+
+(defn form-input [type opts label id placeholder fields optional?]
+  [:div.form-group
+   [:label label]
+   (if optional?
+     [input type opts id placeholder fields]
+     [:div.input-group
+      [input type opts id placeholder fields]
+      [:span.input-group-addon
+       [:span.glyphicon.glyphicon-asterisk]]])])
+
+(defn text-input [label id placeholder fields & [optional?]]
+  (form-input :text {} label id placeholder fields optional?))
+
+(defn textarea [rows label id placeholder fields & [optional?]]
+  (form-input :textarea {:rows (or rows 5)} label id placeholder fields optional?))
+
+(defn email-input [label id placeholder fields & [optional?]]
+  (form-input :email {} label id placeholder fields optional?))
+
+(defn password-input [label id placeholder fields & [optional?]]
+  (form-input :password {} label id placeholder fields optional?))

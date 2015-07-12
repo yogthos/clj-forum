@@ -7,8 +7,11 @@
             [markdown.core :refer [md->html]]
             [ajax.core :refer [GET POST]]
             [clj-forum.components.sidebar :refer [sidebar]]
-            [clj-forum.components.registration :refer [registration-form]])
+            [clj-forum.components.registration :refer [registration-form]]
+            [clj-forum.components.submission :refer [submission-form]])
   (:import goog.History))
+
+(session/put! :identity "foo")
 
 (defn navbar []
   [:div.navbar.navbar-inverse.navbar-fixed-top
@@ -38,7 +41,8 @@
    :about #'about-page})
 
 (def modals
-  {:registration #'registration-form})
+  {:registration #'registration-form
+   :submission #'submission-form})
 
 (defn page []
   [:div

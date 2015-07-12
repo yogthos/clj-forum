@@ -1,3 +1,6 @@
 (ns clj-forum.components.searchbar)
 
-(defn search [])
+(defn search []
+  [:div
+   [:input {:type :text
+            :placeholder "search"}]])
