@@ -1,6 +1,16 @@
 # clj-forum
 
-FIXME
+## Goals
+
+* REST API
+* OAuth logins
+* REPL
+* syntax highlighting
+* Markdown in comments
+* Moderated
+* Mobile friendly
+* Topics: news, questions, etc.
+* live chat?
 
 ## Prerequisites
 
