@@ -6,6 +6,7 @@
             [goog.history.EventType :as EventType]
             [markdown.core :refer [md->html]]
             [ajax.core :refer [GET POST]]
+            [clj-forum.components.common :refer [error-modal]]
             [clj-forum.components.sidebar :refer [sidebar]]
             [clj-forum.components.registration :refer [registration-form]]
             [clj-forum.components.submission :refer [submission-form]])
@@ -46,6 +47,7 @@
 
 (defn page []
   [:div
+   [error-modal]
    (if-let [modal (session/get :modal)]
      [(modals modal)])
    [(pages (session/get :page))]])

@@ -17,3 +17,6 @@ body {
     z-index: 1;
 }
 
+pre, code.hljs {
+    background-color: transparent;
+}

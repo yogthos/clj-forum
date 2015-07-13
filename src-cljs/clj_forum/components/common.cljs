@@ -24,7 +24,7 @@
       [:div.form-group
        [:div.alert.alert-danger (:cause error)]]]
      [:div.form-group
-      [:button.btn.btn-primary.btn-lg.btn-block
+      [:button.btn.btn-danger.btn-lg.btn-block
        {:type     "submit"
         :on-click #(session/remove! :error)}
        "OK"]]]))
@@ -62,3 +62,25 @@
 
 (defn password-input [label id placeholder fields & [optional?]]
   (form-input :password {} label id placeholder fields optional?))
+
+(defn mounted-component [component handler]
+  (with-meta
+    (fn [] component)
+    {:component-did-mount
+     (fn [this]
+       (let [node (reagent.core/dom-node this)]
+         (handler node)))}))
+
+(defn md->html [content]
+  [(mounted-component
+     [:div {:dangerouslySetInnerHTML
+            {:__html content}}]
+     #(let [nodes (.querySelectorAll % "pre code")]
+       (loop [i (.-length nodes)]
+         (when-not (neg? i)
+           (when-let [item (.item nodes i)]
+             (.highlightBlock js/hljs item))
+           (recur (dec i))))))])
+
+(defn markdown [text]
+  (-> text str js/marked md->html))
