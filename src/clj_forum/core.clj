@@ -1,5 +1,5 @@
 (ns clj-forum.core
-  (:require [clj-forum.handler :refer [app init destroy]]
+  (:require [clj-forum.handler :refer [app init destroy parse-port]]
             [org.httpkit.server :as http-kit]
             [clj-forum.db.migrations :as migrations]
             [taoensso.timbre :as timbre]
@@ -8,8 +8,8 @@
 
 (defonce server (atom nil))
 
-(defn parse-port [[port]]
-  (Integer/parseInt (or port (env :port) "3000")))
+(defn http-port [[port]]
+  (parse-port (or port (env :port) 3000)))
 
 (defn start-server [port]
   (init)
@@ -24,8 +24,8 @@
     (@server :timeout 100)
     (reset! server nil)))
 
-(defn start-app [args]
-  (let [port (parse-port args)]
+(defn start-app [port]
+  (let [port (http-port port)]
     (.addShutdownHook (Runtime/getRuntime) (Thread. stop-server))
     (timbre/info "server is starting on port " port)
     (start-server port)))
@@ -34,4 +34,3 @@
   (cond
     (some #{"migrate" "rollback"} args) (migrations/migrate args)
     :else (start-app args)))
-  

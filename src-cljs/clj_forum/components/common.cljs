@@ -2,6 +2,12 @@
   (:require [reagent.core :refer [atom]]
             [reagent.session :as session]))
 
+(def spinner
+  [:div.spinner
+   [:div.bounce1]
+   [:div.bounce2]
+   [:div.bounce3]])
+
 (def modal-backdrop
   [:div.modal-backdrop.fade.in])
 

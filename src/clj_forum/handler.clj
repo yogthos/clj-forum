@@ -18,12 +18,22 @@
            (route/resources "/")
            (route/not-found "Not Found"))
 
+(defn parse-port [port]
+  (when port
+    (cond
+      (string? port) (Integer/parseInt port)
+      (number? port) port
+      :else          (throw (Exception. (str "invalid port value: " port))))))
+
 (defn start-nrepl
-  "Start a network repl for debugging when the :repl-port is set in the environment."
+  "Start a network repl for debugging when the :nrepl-port is set in the environment."
   []
-  (when-let [port (env :repl-port)]
+  (when-let [port (env :nrepl-port)]
     (try
-      (reset! nrepl-server (nrepl/start-server :port port))
+      (->> port
+           (parse-port)
+           (nrepl/start-server :port)
+           (reset! nrepl-server))
       (timbre/info "nREPL server started on port" port)
       (catch Throwable t
         (timbre/error "failed to start nREPL" t)))))

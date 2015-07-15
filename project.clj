@@ -42,9 +42,6 @@
   :uberjar-name "clj-forum.jar"
   :jvm-opts ["-server"]
 
-  ;;enable to start the nREPL server when the application launches
-  ;:env {:repl-port 7001}
-
   :main clj-forum.core
   :migratus {:store :database}
 
@@ -64,6 +61,14 @@
       :externs ["react/externs/react.js"]
       :optimizations :none
       :output-to "resources/public/js/app.js"
+      ;:modules
+      #_{                                            ;:common
+                     #_{:output-to "resources/assets/js/common.js"
+                      :entries #{"com.foo.common"}}
+                :foo {:output-to "resources/public/js/foo.js"
+                      :entries #{"clj-forum.core"}}
+                :bar {:output-to "resources/public/js/bar.js"
+                      :entries #{"clj-forum.components.post"}}}
       :pretty-print true}}}}
 
   :profiles
@@ -98,4 +103,5 @@
          :repl-options {:init-ns clj-forum.core}
          :injections [(require 'pjstadig.humane-test-output)
                       (pjstadig.humane-test-output/activate!)]
-         :env {:dev true}}})
+         :env {:dev true
+               :nrepl-port 7001}}})
